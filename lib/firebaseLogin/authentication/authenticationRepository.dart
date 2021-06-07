@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_login/firebaseLogin/authentication/authenticationUser.dart';
@@ -32,7 +33,7 @@ class InitializeAuthentication {
 //-----------------------------------------------------------------------------
 // class AuthenticationRepository
 //-----------------------------------------------------------------------------
-class AuthenticationRepository {
+class AuthenticationRepository implements IAuthenticationRepository<AuthenticationUser> {
   final CacheUser _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;

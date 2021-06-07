@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:firebase_login/firebaseLogin/authentication/authenticationUser.dart';
-import 'package:firebase_login/firebaseLogin/authentication/authenticationRepository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:pedantic/pedantic.dart';
 
 //-----------------------------------------------------------------------------
 // State:
-//  - AuthenticationBlocState.authenticated
-//  - AuthenticationBlocState.unauthenticated
+//  - AuthenticationBlocState.authenticated(AuthenticationUser user)
+//  - AuthenticationBlocState.unauthenticated()
 //-----------------------------------------------------------------------------
 enum AuthenticationStatus { authenticated, unauthenticated }
 
@@ -16,24 +16,32 @@ class AuthenticationBlocState {
   final AuthenticationUser user;
 
   // constructors
+  const AuthenticationBlocState._({required this.status, this.user = AuthenticationUser.empty});
+
   const AuthenticationBlocState.authenticated(AuthenticationUser user)
       : this._(status: AuthenticationStatus.authenticated, user: user);
+
   const AuthenticationBlocState.unauthenticated() : this._(status: AuthenticationStatus.unauthenticated);
-  const AuthenticationBlocState._({required this.status, this.user = AuthenticationUser.empty});
 }
 
 //-----------------------------------------------------------------------------
 // Events:
-//  - AuthenticationBlocEvent_LogoutRequested
-//  - AuthenticationBlocEvent_UserChanged
+//  - AuthenticationBlocEvent.logoutRequested()
+//  - AuthenticationBlocEvent.userChanged((AuthenticationUser user))
 //-----------------------------------------------------------------------------
+
 abstract class AuthenticationBlocEvent {
-  const AuthenticationBlocEvent();
+  const factory AuthenticationBlocEvent.logoutRequested() = AuthenticationBlocEvent_LogoutRequested;
+  const factory AuthenticationBlocEvent.userChanged(AuthenticationUser user) = AuthenticationBlocEvent_UserChanged;
 }
 
-class AuthenticationBlocEvent_LogoutRequested extends AuthenticationBlocEvent {}
+// ignore: camel_case_types
+class AuthenticationBlocEvent_LogoutRequested implements AuthenticationBlocEvent {
+  const AuthenticationBlocEvent_LogoutRequested();
+}
 
-class AuthenticationBlocEvent_UserChanged extends AuthenticationBlocEvent {
+// ignore: camel_case_types
+class AuthenticationBlocEvent_UserChanged implements AuthenticationBlocEvent {
   final AuthenticationUser user;
   const AuthenticationBlocEvent_UserChanged(this.user);
 }
@@ -42,7 +50,7 @@ class AuthenticationBlocEvent_UserChanged extends AuthenticationBlocEvent {
 // AuthenticationBloc
 //-----------------------------------------------------------------------------
 class AuthenticationBloc extends Bloc<AuthenticationBlocEvent, AuthenticationBlocState> {
-  final AuthenticationRepository authenticationRepository;
+  final IAuthenticationRepository authenticationRepository;
   late final StreamSubscription<AuthenticationUser> _userSubscription;
   AuthenticationBloc(this.authenticationRepository)
       : super(
@@ -53,7 +61,7 @@ class AuthenticationBloc extends Bloc<AuthenticationBlocEvent, AuthenticationBlo
     _userSubscription = authenticationRepository.userStream.listen(_onUserChanged);
   }
 
-  void _onUserChanged(AuthenticationUser user) => add(AuthenticationBlocEvent_UserChanged(user));
+  void _onUserChanged(AuthenticationUser user) => add(AuthenticationBlocEvent.userChanged(user));
 
   @override
   Stream<AuthenticationBlocState> mapEventToState(AuthenticationBlocEvent event) async* {

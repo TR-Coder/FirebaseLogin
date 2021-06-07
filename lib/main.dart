@@ -1,18 +1,19 @@
 import 'package:firebase_login/firebaseLogin/authentication/authenticationBloc.dart';
 import 'package:firebase_login/firebaseLogin/authentication/authenticationRepository.dart';
-import 'package:firebase_login/home_screen.dart';
+import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
+import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
 import 'package:firebase_login/firebaseLogin/login/login_screen.dart';
 import 'package:firebase_login/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
-  final authenticationRepository = await InitializeAuthentication.init();
+  final IAuthenticationRepository authenticationRepository = await InitializeAuthentication.init();
   runApp(App(authenticationRepository));
 }
 
 class App extends StatelessWidget {
-  final AuthenticationRepository _authenticationRepository;
+  final IAuthenticationRepository _authenticationRepository;
   const App(this._authenticationRepository);
 
   @override
@@ -35,7 +36,6 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      title: 'Authentication',
       theme: ThemeData(primarySwatch: Colors.purple),
       onGenerateRoute: Routing().selector,
       initialRoute: Routing().splashScreen,

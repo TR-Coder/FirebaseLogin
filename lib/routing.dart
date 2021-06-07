@@ -1,4 +1,4 @@
-import 'package:firebase_login/home_screen.dart';
+import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
 import 'package:firebase_login/firebaseLogin/login/login_screen.dart';
 import 'package:firebase_login/splashScreen.dart';
 import 'package:flutter/material.dart';
