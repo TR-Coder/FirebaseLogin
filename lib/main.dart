@@ -1,5 +1,5 @@
-import 'package:firebase_login/firebaseLogin/authentication/authenticationBloc.dart';
-import 'package:firebase_login/firebaseLogin/authentication/authenticationRepository.dart';
+import 'package:firebase_login/firebaseLogin/authentication/authentication_bloc.dart';
+import 'package:firebase_login/firebaseLogin/authentication/authentication_repository.dart';
 import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
 import 'package:firebase_login/firebaseLogin/login/login_screen.dart';

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:firebase_login/firebaseLogin/authentication/authenticationUser.dart';
+import 'package:firebase_login/firebaseLogin/authentication/authentication_user.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:pedantic/pedantic.dart';

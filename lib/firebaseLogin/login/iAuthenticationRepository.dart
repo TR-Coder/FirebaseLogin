@@ -1,4 +1,4 @@
-import 'package:firebase_login/firebaseLogin/authentication/authenticationUser.dart';
+import 'package:firebase_login/firebaseLogin/authentication/authentication_user.dart';
 
 abstract class IAuthenticationRepository<T> {
   // ignore: unused_field

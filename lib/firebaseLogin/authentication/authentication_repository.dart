@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_login/firebaseLogin/authentication/authenticationUser.dart';
+import 'package:firebase_login/firebaseLogin/authentication/authentication_user.dart';
 
 //-----------------------------------------------------------------------------
 // Classes Exception
