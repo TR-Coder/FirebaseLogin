@@ -92,10 +92,6 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
       print(e);
       throw LogInWithEmailAndPasswordFailure();
     }
-
-    // on Exception {
-    //   throw LogInWithGoogleFailure();
-    // }
   }
 
   // logInWithEmailAndPassword

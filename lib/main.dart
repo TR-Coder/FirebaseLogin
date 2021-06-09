@@ -1,11 +1,15 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_login/firebaseLogin/authentication/authentication_bloc.dart';
 import 'package:firebase_login/firebaseLogin/authentication/authentication_repository.dart';
+import 'package:firebase_login/firebaseLogin/internet_connection/internet_connection_bloc.dart';
 import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
 import 'package:firebase_login/firebaseLogin/login/login_screen.dart';
 import 'package:firebase_login/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// https://resocoder.com/2019/05/11/beautiful-snackbar-on-flutter-without-scaffold-flushbar-library/
 
 void main() async {
   final IAuthenticationRepository authenticationRepository = await InitializeAuthentication.init();
@@ -20,10 +24,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: _authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(_authenticationRepository),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AuthenticationBloc(_authenticationRepository),
+          ),
+          BlocProvider(
+            create: (_) => InternetConnectionBloc(Connectivity()),
+          ),
+        ],
         child: AppView(),
       ),
+      // child: BlocProvider(
+      //   create: (_) => AuthenticationBloc(_authenticationRepository),
+      //   child: AppView(),
+      // ),
     );
   }
 }

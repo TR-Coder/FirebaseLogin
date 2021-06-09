@@ -1,4 +1,6 @@
+import 'package:firebase_login/firebaseLogin/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   static const route = '/HomeScreen';
@@ -11,30 +13,11 @@ class HomeScreen extends StatelessWidget {
         children: [
           Center(
             child: ElevatedButton(
-              child: Text('Sign out'),
-              onPressed: () {},
-            ),
+                child: Text('Sign out'),
+                onPressed: () => context.read<AuthenticationBloc>().add(AuthenticationBlocEvent.logoutRequested())),
           ),
         ],
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return BlocBuilder<TABBLOC.Def, TABBLOC.AppTab>(
-  //     builder: (context, activeTab) {
-  //       return Scaffold(
-  //         appBar: AppBar(
-  //           title: Text('Home Screen'),
-  //         ),
-  //         body: (activeTab == TABBLOC.AppTab.todos) ? ListViewFilteredTodos() : ShowStats(),
-  //         floatingActionButton: FloatingActionButton(
-  //           child: Icon(Icons.add),
-  //           onPressed: () => Navigator.of(context).pushNamed(AddEditScreen.nom),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 }

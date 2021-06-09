@@ -1,4 +1,3 @@
-// -----------------------------------------------------------------------------
 abstract class FormValidatorField<T, E> {
   final T value;
   E status;
