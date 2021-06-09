@@ -87,9 +87,15 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
         idToken: googleAuth?.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
-    } on Exception {
-      throw LogInWithGoogleFailure();
+    } catch (e) {
+      print('--- ERROR AUTENTICACIÓ ---');
+      print(e);
+      throw LogInWithEmailAndPasswordFailure();
     }
+
+    // on Exception {
+    //   throw LogInWithGoogleFailure();
+    // }
   }
 
   // logInWithEmailAndPassword

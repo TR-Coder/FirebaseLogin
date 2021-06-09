@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   static const route = '/HomeScreen';
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('HomeScreen')),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login screen')),
+      body: Column(
+        children: [
+          Center(
+            child: ElevatedButton(
+              child: Text('Sign out'),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
     );
   }
 
