@@ -38,7 +38,7 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               const SnackBar(
-                content: Text('Authentication Failure'),
+                content: Text("Error d'autenticació"),
               ),
             );
         }
