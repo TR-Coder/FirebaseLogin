@@ -7,49 +7,45 @@ import 'package:firebase_login/firebaseLogin/widgets/form_validator.dart';
 
 //------------------------------------------------------------------------------
 // ESDEVENIMENTS
-//------------------------------------------------------------------------------
-abstract class LoginEvent {
-  const factory LoginEvent.emailChanged(String email) = LoginEvent_emailChanged;
-  const factory LoginEvent.passwordChanged(String password) = LoginEvent_passwordChanged;
-  const factory LoginEvent.withCredentials() = LoginEvent_withCredentials;
-  const factory LoginEvent.withGoogle() = LoginEvent_withGoogle;
+//-----------------------------------------------------------------------------
+abstract class SignupEvent {
+  const factory SignupEvent.emailChanged(String email) = SignupEvent_emailChanged;
+  const factory SignupEvent.passwordChanged(String password) = SignupEvent_passwordChanged;
+  const factory SignupEvent.withCredentials() = SignupEvent_withCredentials;
 }
 
-class LoginEvent_emailChanged implements LoginEvent {
+class SignupEvent_emailChanged implements SignupEvent {
   final String emailTxt;
-  const LoginEvent_emailChanged(this.emailTxt);
+  const SignupEvent_emailChanged(this.emailTxt);
 }
 
-class LoginEvent_passwordChanged implements LoginEvent {
+class SignupEvent_passwordChanged implements SignupEvent {
   final String password;
-  const LoginEvent_passwordChanged(this.password);
+  const SignupEvent_passwordChanged(this.password);
 }
 
-class LoginEvent_withCredentials implements LoginEvent {
-  const LoginEvent_withCredentials();
-}
-
-class LoginEvent_withGoogle implements LoginEvent {
-  const LoginEvent_withGoogle();
+class SignupEvent_withCredentials implements SignupEvent {
+  const SignupEvent_withCredentials();
 }
 
 //------------------------------------------------------------------------------
 // ESTAT
 //------------------------------------------------------------------------------
-class LoginState {
+
+class SignupState {
   final Email email;
   final Password password;
   final FormValidatorStatus status;
 
-  LoginState._({required this.email, required this.password, required this.status});
+  SignupState._({required this.email, required this.password, required this.status});
 
-  LoginState.init()
+  SignupState.init()
       : email = Email(initValue: ''),
         password = Password(initValue: ''),
         status = FormValidatorStatus.noValidated;
 
-  LoginState copyWith({Email? email, Password? password, FormValidatorStatus? status}) {
-    return LoginState._(
+  SignupState copyWith({Email? email, Password? password, FormValidatorStatus? status}) {
+    return SignupState._(
       email: email ?? this.email,
       password: password ?? this.password,
       status: status ?? this.status,
@@ -60,37 +56,34 @@ class LoginState {
 //------------------------------------------------------------------------------
 // BLOC
 //------------------------------------------------------------------------------
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class SignupBloc extends Bloc<SignupEvent, SignupState> {
   final IAuthenticationRepository authenticationRepository;
-  LoginBloc({required this.authenticationRepository}) : super(LoginState.init());
+  SignupBloc({required this.authenticationRepository}) : super(SignupState.init());
 
   @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginEvent_emailChanged) {
+  Stream<SignupState> mapEventToState(SignupEvent event) async* {
+    if (event is SignupEvent_emailChanged) {
       Email newEmail = state.email.copyWith(value: event.emailTxt, status: EmailStatus.noValidated);
       yield state.copyWith(email: newEmail, status: FormValidatorStatus.noValidated);
     } //
-    else if (event is LoginEvent_passwordChanged) {
+    else if (event is SignupEvent_passwordChanged) {
       Password newPassword = state.password.copyWith(value: event.password, status: PasswordStatus.noValidated);
       yield state.copyWith(password: newPassword, status: FormValidatorStatus.noValidated);
     } //
-    else if (event is LoginEvent_withCredentials) {
+    else if (event is SignupEvent_withCredentials) {
       FormValidatorStatus formStatus = FormValidator.validate([state.email, state.password]);
       if (formStatus == FormValidatorStatus.valid)
-        yield* logInWithCredentials();
+        yield* SignupWithCredentials();
       else
         yield state.copyWith(status: FormValidatorStatus.invalid);
     } //
-    else if (event is LoginEvent_withGoogle) {
-      yield* logInWithGoogle();
-    }
   }
 
-  // logInWithCredentials
-  Stream<LoginState> logInWithCredentials() async* {
+  // SignupWithCredentials
+  Stream<SignupState> SignupWithCredentials() async* {
     yield state.copyWith(status: FormValidatorStatus.submissionInProgress);
     try {
-      await authenticationRepository.logInWithEmailAndPassword(
+      await authenticationRepository.signUp(
         email: state.email.value,
         password: state.password.value,
       );
@@ -100,21 +93,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  // logInWithGoogle
-  Stream<LoginState> logInWithGoogle() async* {
-    yield state.copyWith(status: FormValidatorStatus.submissionInProgress);
-    try {
-      await authenticationRepository.logInWithGoogle();
-      yield state.copyWith(status: FormValidatorStatus.submissionSuccess);
-    } on AuthenticationFailure catch (e) {
-      yield* loginErrorHandler(e);
-    } on NoSuchMethodError {
-      yield state.copyWith(status: FormValidatorStatus.noValidated);
-    }
-  }
-
   // loginErrorHandler
-  Stream<LoginState> loginErrorHandler(AuthenticationFailure e) async* {
+  Stream<SignupState> loginErrorHandler(AuthenticationFailure e) async* {
     String errorMsg = LoginErrorMessages.get(e);
 
     if (e.type == AuthenticationFailureType.wrongPassword) {
@@ -126,5 +106,3 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 }
-
-// https://medium.com/flutter-community/firebase-auth-exceptions-handling-flutter-54ab59c2853d

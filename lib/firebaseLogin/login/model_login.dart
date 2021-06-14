@@ -11,11 +11,23 @@ class Email extends FormValidatorField<String, EmailStatus> {
 
   @override
   EmailStatus validate() {
-    return this.status = value.isEmpty ? EmailStatus.invalid : EmailStatus.valid;
+    //return this.status = value.isEmpty ? EmailStatus.invalid : EmailStatus.valid;
+    this.errorMsg = '';
+    this.status = EmailStatus.valid;
+
+    if (value.isEmpty) {
+      this.errorMsg = "L'usuari és obligatori";
+      this.status = EmailStatus.invalid;
+    }
+    return this.status;
   }
 
-  Email copyWith({required String value, required EmailStatus status}) {
-    return Email(initValue: value, status: status);
+  Email copyWith({String? value, EmailStatus? status, String? errorMsg}) {
+    //return Email(initValue: value, status: status)..errorMsg = errorMsg;
+    return Email(
+      initValue: value ?? this.value,
+      status: status ?? this.status,
+    )..errorMsg = errorMsg;
   }
 
   @override
@@ -34,11 +46,22 @@ class Password extends FormValidatorField<String, PasswordStatus> {
 
   @override
   PasswordStatus validate() {
-    return this.status = value.isEmpty ? PasswordStatus.invalid : PasswordStatus.valid;
+    //return this.status = value.isEmpty ? PasswordStatus.invalid : PasswordStatus.valid;
+    this.errorMsg = '';
+    this.status = PasswordStatus.valid;
+
+    if (value.isEmpty) {
+      this.errorMsg = 'La contrasenya és obligatoria';
+      this.status = PasswordStatus.invalid;
+    }
+    return this.status;
   }
 
-  Password copyWith({required String value, required PasswordStatus status}) {
-    return Password(initValue: value, status: status);
+  Password copyWith({String? value, PasswordStatus? status, String? errorMsg}) {
+    return Password(
+      initValue: value ?? this.value,
+      status: status ?? this.status,
+    )..errorMsg = errorMsg;
   }
 
   @override

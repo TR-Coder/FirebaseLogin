@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +8,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_login/firebaseLogin/authentication/authentication_user.dart';
 
 //-----------------------------------------------------------------------------
-// Classes Exception
+// Classes AuthenticationFailureType
 //-----------------------------------------------------------------------------
-class SignUpFailure implements Exception {}
+enum AuthenticationFailureType {
+  emailAlreadyExists,
+  wrongPassword,
+  invalidEmail,
+  userNotFound,
+  userDisabled,
+  operationNotAllowed,
+  undefined,
+  weakPassword
+}
 
-class LogInWithEmailAndPasswordFailure implements Exception {}
-
-class LogInWithGoogleFailure implements Exception {}
-
-class LogOutFailure implements Exception {}
+class AuthenticationFailure implements Exception {
+  AuthenticationFailure({required this.type});
+  AuthenticationFailureType type;
+}
 
 //-----------------------------------------------------------------------------
 // class AuthenticationRepository
@@ -72,8 +81,9 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
   Future<void> signUp({required String email, required String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-    } on Exception {
-      throw SignUpFailure();
+    } on FirebaseAuthException catch (e) {
+      print(AuthenticationFailureType.invalidEmail.toString());
+      AuthenticationExceptionHandler(e);
     }
   }
 
@@ -87,10 +97,8 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
         idToken: googleAuth?.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
-    } catch (e) {
-      print('--- ERROR AUTENTICACIÓ ---');
-      print(e);
-      throw LogInWithEmailAndPasswordFailure();
+    } on FirebaseAuthException catch (e) {
+      AuthenticationExceptionHandler(e);
     }
   }
 
@@ -98,8 +106,8 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
   Future<void> logInWithEmailAndPassword({required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    } on Exception {
-      throw LogInWithEmailAndPasswordFailure();
+    } on FirebaseAuthException catch (e) {
+      AuthenticationExceptionHandler(e);
     }
   }
 
@@ -107,8 +115,32 @@ class AuthenticationRepository implements IAuthenticationRepository<Authenticati
   Future<void> logOut() async {
     try {
       await Future.wait([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
-    } on Exception {
-      throw LogOutFailure();
+    } on FirebaseAuthException catch (e) {
+      AuthenticationExceptionHandler(e);
+    }
+  }
+
+  // AuthenticationExceptionHandler
+  // https://firebase.google.com/docs/reference/js/firebase.auth.Auth
+  //
+  void AuthenticationExceptionHandler(FirebaseException e) {
+    switch (e.code) {
+      case "invalid-email":
+        throw AuthenticationFailure(type: AuthenticationFailureType.invalidEmail);
+      case "wrong-password":
+        throw AuthenticationFailure(type: AuthenticationFailureType.wrongPassword);
+      case "user-not-found":
+        throw AuthenticationFailure(type: AuthenticationFailureType.userNotFound);
+      case "user-disabled":
+        throw AuthenticationFailure(type: AuthenticationFailureType.userDisabled);
+      case "operation-not-allowed":
+        throw AuthenticationFailure(type: AuthenticationFailureType.operationNotAllowed);
+      case "email-already-in-use":
+        throw AuthenticationFailure(type: AuthenticationFailureType.emailAlreadyExists);
+      case "weak-password":
+        throw AuthenticationFailure(type: AuthenticationFailureType.weakPassword);
+      default:
+        throw AuthenticationFailure(type: AuthenticationFailureType.undefined);
     }
   }
 }

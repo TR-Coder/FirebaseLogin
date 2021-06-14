@@ -1,10 +1,12 @@
 abstract class FormValidatorField<T, E> {
   final T value;
   E status;
+  String? errorMsg;
 
   FormValidatorField({
     required this.value,
     required this.status,
+    this.errorMsg = '',
   });
 
   E validate();

@@ -1,5 +1,6 @@
 import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
 import 'package:firebase_login/firebaseLogin/login/login_screen.dart';
+import 'package:firebase_login/firebaseLogin/login/signup_screen.dart';
 import 'package:firebase_login/splashScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,10 @@ class Routing {
       case LoginScreen.route:
         return MaterialPageRoute(
           builder: (_) => LoginScreen(),
+        );
+      case SignupScreen.route:
+        return MaterialPageRoute(
+          builder: (_) => SignupScreen(),
         );
       default:
         return MaterialPageRoute(

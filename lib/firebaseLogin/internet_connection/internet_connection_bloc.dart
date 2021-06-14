@@ -2,7 +2,6 @@
 // ESDEVENIMENTS
 //------------------------------------------------------------------------------
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,26 +17,23 @@ class InternetConnectionBlocEventChanged {
 enum ConnectionType { wifi, mobile }
 
 abstract class InternetConnectionBlocState {
-  const factory InternetConnectionBlocState.loading() = InternetConnectionBlocState_Loading;
+  const factory InternetConnectionBlocState.loading() = InternetConnectionBlocState_loading;
   const factory InternetConnectionBlocState.connected(ConnectionType connectionType) =
-      InternetConnectionBlocState_Connected;
-  const factory InternetConnectionBlocState.disconnected() = InternetConnectionBlocState_Disconnected;
+      InternetConnectionBlocState_connected;
+  const factory InternetConnectionBlocState.disconnected() = InternetConnectionBlocState_disconnected;
 }
 
-// ignore: camel_case_types
-class InternetConnectionBlocState_Loading implements InternetConnectionBlocState {
-  const InternetConnectionBlocState_Loading();
+class InternetConnectionBlocState_loading implements InternetConnectionBlocState {
+  const InternetConnectionBlocState_loading();
 }
 
-// ignore: camel_case_types
-class InternetConnectionBlocState_Connected implements InternetConnectionBlocState {
+class InternetConnectionBlocState_connected implements InternetConnectionBlocState {
   final ConnectionType connectionType;
-  const InternetConnectionBlocState_Connected(this.connectionType);
+  const InternetConnectionBlocState_connected(this.connectionType);
 }
 
-// ignore: camel_case_types
-class InternetConnectionBlocState_Disconnected implements InternetConnectionBlocState {
-  const InternetConnectionBlocState_Disconnected();
+class InternetConnectionBlocState_disconnected implements InternetConnectionBlocState {
+  const InternetConnectionBlocState_disconnected();
 }
 
 //-----------------------------------------------------------------------------
@@ -46,8 +42,9 @@ class InternetConnectionBlocState_Disconnected implements InternetConnectionBloc
 class InternetConnectionBloc extends Bloc<InternetConnectionBlocEventChanged, InternetConnectionBlocState> {
   final Connectivity connectivity;
   late StreamSubscription _connectivityStreamSubscription;
-  InternetConnectionBloc(this.connectivity) : super(InternetConnectionBlocState_Loading()) {
+  InternetConnectionBloc(this.connectivity) : super(InternetConnectionBlocState_loading()) {
     _connectivityStreamSubscription = connectivity.onConnectivityChanged.listen((connectivityResult) {
+      print('===================================================');
       add(InternetConnectionBlocEventChanged(connectivityResult));
     });
   }
@@ -56,11 +53,11 @@ class InternetConnectionBloc extends Bloc<InternetConnectionBlocEventChanged, In
   Stream<InternetConnectionBlocState> mapEventToState(InternetConnectionBlocEventChanged event) async* {
     if (event is InternetConnectionBlocEventChanged) {
       if (event.connectivityResult == ConnectivityResult.wifi) {
-        yield InternetConnectionBlocState_Connected(ConnectionType.wifi);
+        yield InternetConnectionBlocState_connected(ConnectionType.wifi);
       } else if (event.connectivityResult == ConnectivityResult.mobile) {
-        yield InternetConnectionBlocState_Connected(ConnectionType.mobile);
+        yield InternetConnectionBlocState_connected(ConnectionType.mobile);
       } else if (event.connectivityResult == ConnectivityResult.none) {
-        yield InternetConnectionBlocState_Disconnected();
+        yield InternetConnectionBlocState_disconnected();
       }
     }
   }

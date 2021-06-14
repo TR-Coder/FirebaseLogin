@@ -31,19 +31,19 @@ class AuthenticationBlocState {
 //-----------------------------------------------------------------------------
 
 abstract class AuthenticationBlocEvent {
-  const factory AuthenticationBlocEvent.logoutRequested() = AuthenticationBlocEvent_LogoutRequested;
-  const factory AuthenticationBlocEvent.userChanged(AuthenticationUser user) = AuthenticationBlocEvent_UserChanged;
+  const factory AuthenticationBlocEvent.logoutRequested() = AuthenticationBlocEvent_logoutRequested;
+  const factory AuthenticationBlocEvent.userChanged(AuthenticationUser user) = AuthenticationBlocEvent_userChanged;
 }
 
 // ignore: camel_case_types
-class AuthenticationBlocEvent_LogoutRequested implements AuthenticationBlocEvent {
-  const AuthenticationBlocEvent_LogoutRequested();
+class AuthenticationBlocEvent_logoutRequested implements AuthenticationBlocEvent {
+  const AuthenticationBlocEvent_logoutRequested();
 }
 
 // ignore: camel_case_types
-class AuthenticationBlocEvent_UserChanged implements AuthenticationBlocEvent {
+class AuthenticationBlocEvent_userChanged implements AuthenticationBlocEvent {
   final AuthenticationUser user;
-  const AuthenticationBlocEvent_UserChanged(this.user);
+  const AuthenticationBlocEvent_userChanged(this.user);
 }
 
 //-----------------------------------------------------------------------------
@@ -65,15 +65,15 @@ class AuthenticationBloc extends Bloc<AuthenticationBlocEvent, AuthenticationBlo
 
   @override
   Stream<AuthenticationBlocState> mapEventToState(AuthenticationBlocEvent event) async* {
-    if (event is AuthenticationBlocEvent_UserChanged) {
+    if (event is AuthenticationBlocEvent_userChanged) {
       yield _mapUserChangedToState(event, state);
-    } else if (event is AuthenticationBlocEvent_LogoutRequested) {
+    } else if (event is AuthenticationBlocEvent_logoutRequested) {
       unawaited(authenticationRepository.logOut());
     }
   }
 
   AuthenticationBlocState _mapUserChangedToState(
-      AuthenticationBlocEvent_UserChanged event, AuthenticationBlocState state) {
+      AuthenticationBlocEvent_userChanged event, AuthenticationBlocState state) {
     return event.user.isNotEmpty
         ? AuthenticationBlocState.authenticated(event.user)
         : const AuthenticationBlocState.unauthenticated();
