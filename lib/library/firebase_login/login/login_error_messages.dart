@@ -1,4 +1,4 @@
-import 'package:firebase_login/firebaseLogin/authentication/authentication_repository.dart';
+import 'package:firebase_login/library/firebase_login/authentication/authentication_repository.dart';
 
 class LoginErrorMessages {
   static String get(AuthenticationFailure e) {

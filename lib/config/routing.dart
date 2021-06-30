@@ -1,7 +1,7 @@
-import 'package:firebase_login/firebaseLogin/home/home_screen.dart';
-import 'package:firebase_login/firebaseLogin/login/login_screen.dart';
-import 'package:firebase_login/firebaseLogin/login/signup_screen.dart';
-import 'package:firebase_login/splashScreen.dart';
+import 'package:firebase_login/ui/screens/home_screen.dart';
+import 'package:firebase_login/library/firebase_login/login/login_screen.dart';
+import 'package:firebase_login/library/firebase_login/login/signup_screen.dart';
+import 'package:firebase_login/ui/screens/splashScreen.dart';
 import 'package:flutter/material.dart';
 
 class Routing {

@@ -1,6 +1,6 @@
-import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
-import 'package:firebase_login/firebaseLogin/login/signup_bloc.dart';
-import 'package:firebase_login/firebaseLogin/widgets/form_validator.dart';
+import 'package:firebase_login/library/firebase_login/login/iAuthenticationRepository.dart';
+import 'package:firebase_login/library/firebase_login/login/signup_bloc.dart';
+import 'package:firebase_login/library/firebase_login/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

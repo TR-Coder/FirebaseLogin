@@ -1,7 +1,8 @@
-import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
-import 'package:firebase_login/firebaseLogin/login/login_bloc.dart';
-import 'package:firebase_login/firebaseLogin/login/signup_screen.dart';
-import 'package:firebase_login/firebaseLogin/widgets/form_validator.dart';
+import 'package:firebase_login/library/firebase_login/internet_connection/internet_connection_bloc.dart';
+import 'package:firebase_login/library/firebase_login/login/iAuthenticationRepository.dart';
+import 'package:firebase_login/library/firebase_login/login/login_bloc.dart';
+import 'package:firebase_login/library/firebase_login/login/signup_screen.dart';
+import 'package:firebase_login/library/firebase_login/widgets/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,7 +12,16 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login screen')),
+      appBar: AppBar(
+        title: const Text('Login screen'),
+        leading: BlocBuilder<InternetConnectionBloc, InternetConnectionBlocState>(
+          builder: (context, state) {
+            if (state == InternetConnectionBlocState.connected) return Icon(Icons.signal_wifi_4_bar);
+            if (state == InternetConnectionBlocState.disconnected) return Icon(Icons.signal_wifi_off);
+            return Icon(Icons.signal_wifi_statusbar_connected_no_internet_4);
+          },
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.all(12),
         child: BlocProvider(

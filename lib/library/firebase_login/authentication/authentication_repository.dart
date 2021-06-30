@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_login/library/firebase_login/login/iAuthenticationRepository.dart';
+import 'package:firebase_login/library/firebase_login/authentication/authentication_user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_login/firebaseLogin/authentication/authentication_user.dart';
 
 //-----------------------------------------------------------------------------
 // Classes AuthenticationFailureType

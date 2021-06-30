@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_login/firebaseLogin/authentication/authentication_repository.dart';
-import 'package:firebase_login/firebaseLogin/login/iAuthenticationRepository.dart';
-import 'package:firebase_login/firebaseLogin/login/login_error_messages.dart';
-import 'package:firebase_login/firebaseLogin/login/model_login.dart';
-import 'package:firebase_login/firebaseLogin/widgets/form_validator.dart';
+import 'package:firebase_login/library/firebase_login/authentication/authentication_repository.dart';
+import 'package:firebase_login/library/firebase_login/login/iAuthenticationRepository.dart';
+import 'package:firebase_login/library/firebase_login/login/login_error_messages.dart';
+import 'package:firebase_login/library/firebase_login/login/model_login.dart';
+import 'package:firebase_login/library/firebase_login/widgets/form_validator.dart';
 
 //------------------------------------------------------------------------------
 // ESDEVENIMENTS

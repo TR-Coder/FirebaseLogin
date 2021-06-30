@@ -1,4 +1,4 @@
-import 'package:firebase_login/firebaseLogin/widgets/form_validator.dart';
+import 'package:firebase_login/library/firebase_login/widgets/form_validator.dart';
 
 //------------------------------------------------------------------------------
 enum EmailStatus { valid, invalid, noValidated }
